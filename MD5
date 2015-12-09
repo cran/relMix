@@ -1,0 +1,13 @@
+34a24691e4350cce11f414a84c9425ac *DESCRIPTION
+df390c53434517b304ac5db487184641 *NAMESPACE
+901bcf60ead647c6479b284c4b3a68ef *R/extRelMix.R
+e9b2e84a39bc6bf6c846fde7c2282747 *R/generate.R
+fcb2a9311475d22f731dad51b2d91778 *R/globals.R
+2471bb1b5e1d2815a773e85c99ff5814 *R/relMix.R
+127679233bc848aa68c2effa005a45f2 *build/partial.rdb
+66cf1942ace7934160b8a6235ab3705e *data/db.RData
+a3a16aba58807d0da1585b0a2cfcfe3c *man/db.Rd
+b3cf5bd9f7fa5a86d52ee9f6a52614d5 *man/extRelMix.Rd
+dca4e355cb05efd427804c3569d8ba74 *man/generate.Rd
+fd25a65a00d4a6c64921c8438d570d9d *man/relMix-package.Rd
+f68068afadc7425e7700668a82937734 *man/relMix.Rd
