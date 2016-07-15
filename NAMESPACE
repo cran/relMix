@@ -1,1 +1,5 @@
 exportPattern("^[[:alpha:]]+")
+import(Familias)
+import(paramlink)
+import(gWidgets)
+importFrom("utils", "read.table", "write.table")

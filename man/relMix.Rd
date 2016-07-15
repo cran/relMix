@@ -1,24 +1,38 @@
+
 \name{relMix}
 \alias{relMix}
 \title{
-Relationship inference based on mixtures. 
+Relationship inference based on mixtures.
 }
 \description{
-Calculates likelihood ratios for relationship inference involving mixtures and missing reference profiles.
+Calculates likelihoods for relationship inference involving mixtures and missing reference profiles, including drop-in and dropout, mutations, silent alleles and theta correction.
 }
 \usage{
-relMix(pedigrees, locus, datamatrix, kinship = 0)
-}
+relMix(pedigrees, locus, R, datamatrix, ids, 
+D=rep(list(c(0,0)),length(ids)), di=0, kinship = 0) }
 \arguments{
   \item{pedigrees}{
 	A list of pedigrees defined using FamiliasPedigree in Familias
 }
   \item{locus}{
-	A Familias locus, including mutation matrices. 
+	A Familias locus. Note that a silent allele must be indicated by 's' (and not 'silent' as in Familias)
+}
+ \item{R}{
+	A vector of mixture alleles 
 }
   \item{datamatrix}{
-	Each line corresponds to one constellation of genotypes for the involved individuals 
+	Each line corresponds to one constellation of genotypes for the involved individuals. Indices of individuals must be given as rownames and must correspond to indices in the pedigree 
 }
+  \item{ids}{
+  Index vector indicating which individuals are contributors in the mixture. The indices must correspond to
+  indices in the pedigree
+  }
+  \item{D}{
+  List of dropout values (between 0 and 1) per contributor. Each element is a vector containing heterozygous and homozygous dropout probability for the given contributor
+  }
+  \item{di}{
+  Drop-in value
+  }
   \item{kinship}{
 	Defines the theta-parameter
 }
@@ -27,62 +41,91 @@ relMix(pedigrees, locus, datamatrix, kinship = 0)
 The function requires the package Familias and calls on the function FamiliasPedigree(). 
 }
 \value{
-The likelihood ratios for the pedigrees and detailed output for each term
+The likelihoods for the pedigrees and detailed output for each term considered in the calculation.
 }
 \references{
+Kaur et al. (2016) Relationship inference based on DNA mixtures, Int J Legal Med.;130(2):323-9
 Egeland, Kling, Mostad (2015) \pkg{Familias}
 }
 \author{
-Navreet Kaur, Thore Egeland
+Navreet Kaur, Thore Egeland, Guro Dorum
 }
 
 \seealso{
-Familias, see www.familias.name
+See \code{\link{relMixGUI}} for a relMix GUI, and \code{\link{FamiliasLocus}} on how to create a Familias locus.
 }
 \examples{
-#Example 1
+#Example 1: paternity trio with mixture of mother and child
 require(Familias)
-require(paramlink)
+#Define alleles and frequencies
+alleles <- 1:2
+afreq <- c(0.5,0.5)
+#Define pedigrees
 persons <- c("CH","MO","AF")
-ped1 <- pedigree(id=persons, dadid=c("AF",NA, NA), momid=c("MO", NA,NA), 
+ped1 <- FamiliasPedigree(id=persons, dadid=c("AF",NA, NA), momid=c("MO", NA,NA), 
                  sex=c("male", "female", "male"))
-ped2 <- pedigree(id=c(persons, "TF"), dadid=c("TF", NA, NA,NA), 
-                momid=c("MO", NA, NA,NA), 
-                sex=c("male", "female", "male", "male"))
-pedigrees <- list(isFather = ped1, unrelated=ped2)
-E=1:3;gAF=c(3,4)
-datamatrix=generate(E,K=NULL,2)
-AF=rep(gAF,dim(datamatrix)[2]/2)
-datamatrix=rbind(datamatrix,AF)
-datamatrix=as.data.frame(datamatrix)
-rownames(datamatrix)[c(1,2)] <- c("CH","MO")
-R=0.00
-theta=0.0
-locus <- FamiliasLocus(frequencies=rep(0.2,5),name="V1",  
-                       allelenames= c(1:5), femaleMutationRate=R,maleMutationRate=R)
-relMix(pedigrees,locus,datamatrix,theta)
- 
-#example 2
-require(Familias)
-require(paramlink)
-data(db)
-persons <- c("CH","MO","AF")
-ped1 <- pedigree(id=persons, dadid=c("AF",NA, NA), momid=c("MO", NA,NA), 
-                 sex=c("male", "female", "male"))
-ped2 <- pedigree(id=c(persons, "TF"), dadid=c("TF", NA, NA,NA), 
+ped2 <- FamiliasPedigree(id=c(persons, "TF"), dadid=c("TF", NA, NA,NA), 
                  momid=c("MO", NA, NA,NA), sex=c("male", "female", "male", "male"))
 pedigrees <- list(isFather = ped1, unrelated=ped2)
-foo=db[db$Marker=="TH01",]
-p=foo[c(4,5,7,8),3] 
-p=c(p,1-sum(p)) #Frequencies for alleles 1,2,3,4,99 sum to 1
-R=0
-locus <- FamiliasLocus(frequencies=p,name="THO1.1",  
-                        allelenames= c(1:4,99), femaleMutationRate=R,maleMutationRate=R)
-CH=c(1,2,1,2,1,3,1,3,2,3,2,3)
-MO=c(1,3,2,3,2,1,2,3,1,2,1,3)
-AF=rep(c(3,4),6)
-datamatrix <- data.frame(rbind(CH,MO,AF) )
-rownames(datamatrix) <- c("CH","MO","AF")
-relMix(pedigrees,locus,datamatrix, kinship=0.01)
-}
+#Create locus object
+locus <- FamiliasLocus(frequencies=afreq,name="M1",  
+                       allelenames= alleles)
+#Known genotypes of alleged father and mother
+gAF <- c(1,1)
+gMO <- c(1,1)
+#Mixture alleles
+R <- c(1,2)
+datamatrix <- createDatamatrix(locus,knownGenos=list(AF=gAF,MO=gMO),idsU=c("CH"))
+#Define dropout and drop-in values
+d <- 0.1
+di <- 0.05
+res <- relMix(pedigrees, locus, R, datamatrix, ids=c("MO","CH"), 
+        D=list(c(0,0),c(d,d^2)),di=di, kinship=0)
+#LR
+res$isFather/res$unrelated
 
+#Example 2: Exhaustive example with silent allele, mutations, dropout and drop-in
+#H1: Contributors are mother and child
+#H2: Contributors are mother and unrelated
+#Possible dropout in both contributors
+gMO <- c(1,1) #Mother's genotype
+R <- 1 #Mixture alleles
+
+#Mother/child pedigree
+persons <- c("CH","MO")
+ped1 <- FamiliasPedigree(id=persons, dadid=c(NA,NA), momid=c("MO", NA), 
+                         sex=c("male", "female"))
+ped2 <- FamiliasPedigree(id=c(persons), dadid=c(NA, NA), 
+                         momid=c( NA, NA), 
+                         sex=c("male", "female"))
+pedigrees <- list(H1 = ped1, H2=ped2)
+
+#Alleles and frequencies:
+#When silent alleles are involved, a custom mutation matrix is required.
+#No mutations are possible to or from silent alleles.
+#We create the mutation model with FamiliasLocus and modify it before it is
+#passed on to relMix
+alleles <- c(1,2,'silent') 
+afreq <- c(0.4,0.5,0.1)
+#Create initial locus object with mutation matrix
+locus <- FamiliasLocus(frequencies=afreq,name='M1',  
+                       allelenames= alleles, MutationModel='Equal',
+                       femaleMutationRate=0.1,maleMutationRate=0.1)
+#Modify mutation matrix from Familias:
+#Silent allele must be given as 's' (not 'silent' as in Familias)
+newAlleles <- c(alleles[-length(alleles)],'s')
+mm <- locus$femaleMutationMatrix
+colnames(mm) <- rownames(mm) <- newAlleles
+#Create new locus object with modified mutation matrix
+locus <- FamiliasLocus(frequencies=afreq,name='M1',  
+                                allelenames= newAlleles, MutationModel='Custom', MutationMatrix=mm)
+knownGenos <- list(gMO)
+names(knownGenos) <- c("MO")
+datamatrix <- createDatamatrix(locus,knownGenos,ids="CH")
+d <- 0.1 #Dropout probability for both contributors
+di <- 0.05
+res2 <- relMix(pedigrees, locus, R, datamatrix, ids=c("MO","CH"), 
+                D=list(c(d,d^2),c(d,d^2)),di=di, kinship=0)
+#LR
+res2$H1/res2$H2
+}
