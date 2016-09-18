@@ -19,3 +19,7 @@ Guro Dorum
 \seealso{
 See \code{\link{relMix}} for the main function implemented in relMixGUI.
 }
+
+\examples{
+#Example data can be found in the folder "tutorialdata" in the installation folder for relMix
+}

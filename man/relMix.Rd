@@ -1,4 +1,3 @@
-
 \name{relMix}
 \alias{relMix}
 \title{
@@ -18,14 +17,14 @@ D=rep(list(c(0,0)),length(ids)), di=0, kinship = 0) }
 	A Familias locus. Note that a silent allele must be indicated by 's' (and not 'silent' as in Familias)
 }
  \item{R}{
-	A vector of mixture alleles 
+	A vector of mixture alleles, or a list of such if there are multiple replicates 
 }
   \item{datamatrix}{
 	Each line corresponds to one constellation of genotypes for the involved individuals. Indices of individuals must be given as rownames and must correspond to indices in the pedigree 
 }
   \item{ids}{
-  Index vector indicating which individuals are contributors in the mixture. The indices must correspond to
-  indices in the pedigree
+  Index vector indicating which individuals are contributors to the mixture. The indices must correspond to
+  indices in the pedigree.
   }
   \item{D}{
   List of dropout values (between 0 and 1) per contributor. Each element is a vector containing heterozygous and homozygous dropout probability for the given contributor
@@ -59,7 +58,7 @@ See \code{\link{relMixGUI}} for a relMix GUI, and \code{\link{FamiliasLocus}} on
 require(Familias)
 #Define alleles and frequencies
 alleles <- 1:2
-afreq <- c(0.5,0.5)
+afreq <- c(0.4,0.6)
 #Define pedigrees
 persons <- c("CH","MO","AF")
 ped1 <- FamiliasPedigree(id=persons, dadid=c("AF",NA, NA), momid=c("MO", NA,NA), 
@@ -81,7 +80,7 @@ d <- 0.1
 di <- 0.05
 res <- relMix(pedigrees, locus, R, datamatrix, ids=c("MO","CH"), 
         D=list(c(0,0),c(d,d^2)),di=di, kinship=0)
-#LR
+#LR=0.054
 res$isFather/res$unrelated
 
 #Example 2: Exhaustive example with silent allele, mutations, dropout and drop-in
@@ -126,6 +125,6 @@ d <- 0.1 #Dropout probability for both contributors
 di <- 0.05
 res2 <- relMix(pedigrees, locus, R, datamatrix, ids=c("MO","CH"), 
                 D=list(c(d,d^2),c(d,d^2)),di=di, kinship=0)
-#LR
+#LR=1.68
 res2$H1/res2$H2
 }

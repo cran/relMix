@@ -80,7 +80,7 @@ createDatamatrix <- function(locus,knownGenos,idsU=NULL){
   
   
   datamatrix <- as.data.frame(datamatrix)
-  rownames(datamatrix) <- c(rownames(known),idsU)
+  rownames(datamatrix) <- c(names(knownGenos),idsU)
   datamatrix
 }
 
