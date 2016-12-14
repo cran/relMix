@@ -614,8 +614,8 @@ relMixGUI <- function(){
       
     }
     LRmarker <- lik1/lik2
-    
-    #dispose(infoWindowLR)
+    #Set NaN's to 0 (likelihood 0 also under H2)
+    LRmarker[is.na(LRmarker)] <- 0
     
     Data <- data.frame(Marker=markers,LR=LRmarker,LikH1=lik1,LikH2=lik2,stringsAsFactors=FALSE)
     

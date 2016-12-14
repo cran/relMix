@@ -25,7 +25,7 @@ knitr::include_graphics("relMix_screenshot.png")
 
 ##Example 1: A paternity case
 
-In this example we consider a paternity case where we have a mixed DNA profile of a mother and child, in addition to reference profiles from the mother and the alleged father. <!-- The example was used in Dorum et al. (2016).-->
+In this example we consider a paternity case where we have a mixed DNA profile of a mother and child, in addition to reference profiles from the mother and the alleged father.
 
 ###1. Import data
 
@@ -54,34 +54,9 @@ knitr::kable(G2,caption="Table 2: Reference profiles for mother and alleged fath
 ```
 
 ####1c. Database
-<!-- 
-Two figures of equal size next to each other
-```{r fig.show = 'hold', out.width = '30%', echo=FALSE}
-knitr::include_graphics("database_crop.PNG")
-knitr::include_graphics("database_options.png")
-```
--->
-
-<!-- 
-```{r, out.width = '30%', echo=FALSE}
-layout( cbind( c(0,0,1,1,1,1,1,0,0), rep(2,9) ) )
-knitr::include_graphics("database_options.png")
-knitr::include_graphics("database_crop.PNG")
-```
--->
-
-<!-- Two figures of unequal size next to each other -->
-<!-- 
-```{r, out.width = '35%', fig.align='center', echo=FALSE, out.extra='style="float:left"'}
-knitr::include_graphics("database_crop.PNG")
-```{r, out.width = '55%', fig.align='center', echo=FALSE, par(mar=c(5,8,4,2)+0.1), out.extra='style="float:right"'}
-knitr::include_graphics("database_options.png")
-```
-<div style="clear: both;"></div>
--->
 
 ```{r, out.width = '30%', fig.align='center', echo=FALSE, fig.cap='Figure 2: Database window.'}
-knitr::include_graphics("database_crop.PNG")
+knitr::include_graphics("database_crop.png")
 ```
 When clicking the database button in the main interface, the window in Figure 2 appears.
 Table 3 shows the format of the allele frequencies to be imported here. There is one row per allele and one column per marker. A blank space indicates that the allele is not observed for that marker. Only an excerpt of the database is shown here.
@@ -216,53 +191,3 @@ The resulting LR for example 2 is shown in Figure 14.
 ```{r, out.width =  350, fig.retina = NULL,echo=FALSE,fig.cap="Figure 14: Computed LR for example 2."}
 knitr::include_graphics("results_ex2.png")
 ```
-
-<!--
-###Import data
-
-The first step in RelMix is to import data from tab delimited .txt-files. Examples will be given for the three types of files that are needed: mixture profile, reference profiles and allele frequencies.
-
-####Mixture profile
-
-The following table shows an example of the format of a mixture file. The first line of the file contains the column names and must correspond with the names given here, i.e. 'SampleName', 'Marker', etc. The file may be expanded with columns 'Allele4', 'Allele5'and so on if there are more than three unique alleles in the mixture.
-```{r, echo=FALSE, results='asis'}
-M <- read.table("mixture.txt",sep="\t",header=TRUE)
-pander::pandoc.table(head(M, 5),missing="",caption="Table 1: Example of a mixture file: sample name and marker name, followed by one column per unique allele observed for that marker.")
-```
-
-####Reference profiles
-
-Table 2 shows the format of the file containing reference profiles. If there are more than one known profiles, the next profile should follow directly after the first one, and each profile is indicated with a specific sample name. In our example there are two known profiles, "Mother" and "Father". \textit{Important:} The names of the individuals in a paternity case must be "Father", "Mother" and "Child", unless custom pedigrees are provided (see below), in which case the sample names must correspond with the individuals ID in the provided pedigree file.
-```{r, echo=FALSE, results='asis'}
-G <- read.table("references.txt",sep="\t",header=TRUE)
-G2 <- rbind(G[1:2,],data.frame(SampleName='...',Marker='',Allele1='',Allele2=''),G[23:24,])
-rownames(G2) <- NULL
-knitr::kable(G2,caption="Table 2: Example of a file with reference profiles. Each profile is indicated with a sample name which must correspond to one of ''Father'', ''Mother'' or ''Child'' (unless a custom pedigree is provided). In this prenatal paternity testing example we only have reference profiles for the mother and father.")
-```
-
-####Database
-<!-- 
-Two figures of equal size next to each other
-```{r fig.show = 'hold', out.width = '30%', echo=FALSE}
-knitr::include_graphics("database_crop.PNG")
-knitr::include_graphics("database_options.png")
-```
--->
-
-<!-- 
-```{r, out.width = '30%', echo=FALSE}
-layout( cbind( c(0,0,1,1,1,1,1,0,0), rep(2,9) ) )
-knitr::include_graphics("database_options.png")
-knitr::include_graphics("database_crop.PNG")
-```
--->
-
-<!-- Two figures of unequal size next to each other -->
-<!-- 
-```{r, out.width = '35%', fig.align='center', echo=FALSE, out.extra='style="float:left"'}
-knitr::include_graphics("database_crop.PNG")
-```{r, out.width = '55%', fig.align='center', echo=FALSE, out.extra='style="float:right"'}
-knitr::include_graphics("database_options.png")
-```
-<div style="clear: both;"></div>
--->

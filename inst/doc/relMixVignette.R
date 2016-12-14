@@ -15,23 +15,8 @@ G2 <- rbind(G[1:2,],data.frame(SampleName='...',Marker='...',Allele1='...',Allel
 rownames(G2) <- NULL
 knitr::kable(G2,caption="Table 2: Reference profiles for mother and alleged father in example 1.")
 
-## ----fig.show = 'hold', out.width = '30%', echo=FALSE--------------------
-knitr::include_graphics("database_crop.PNG")
-knitr::include_graphics("database_options.png")
-
-## ---- out.width = '30%', echo=FALSE--------------------------------------
-layout( cbind( c(0,0,1,1,1,1,1,0,0), rep(2,9) ) )
-knitr::include_graphics("database_options.png")
-knitr::include_graphics("database_crop.PNG")
-
-## ---- out.width = '35%', fig.align='center', echo=FALSE, out.extra='style="float:left"'----
-knitr::include_graphics("database_crop.PNG")
-
-## ---- out.width = '55%', fig.align='center', echo=FALSE, par(mar=c(5,8,4,2)+0.1), out.extra='style="float:right"'----
-knitr::include_graphics("database_options.png")
-
 ## ---- out.width = '30%', fig.align='center', echo=FALSE, fig.cap='Figure 2: Database window.'----
-knitr::include_graphics("database_crop.PNG")
+knitr::include_graphics("database_crop.png")
 
 ## ---- echo=FALSE, results='asis'-----------------------------------------
 freqs <- read.table("frequencies22Markers.txt",sep="\t",header=T,stringsAsFactors=F)
@@ -100,29 +85,4 @@ knitr::include_graphics("dropout_ex2.png")
 
 ## ---- out.width =  350, fig.retina = NULL,echo=FALSE,fig.cap="Figure 14: Computed LR for example 2."----
 knitr::include_graphics("results_ex2.png")
-
-## ---- echo=FALSE, results='asis'-----------------------------------------
-M <- read.table("mixture.txt",sep="\t",header=TRUE)
-pander::pandoc.table(head(M, 5),missing="",caption="Table 1: Example of a mixture file: sample name and marker name, followed by one column per unique allele observed for that marker.")
-
-## ---- echo=FALSE, results='asis'-----------------------------------------
-G <- read.table("references.txt",sep="\t",header=TRUE)
-G2 <- rbind(G[1:2,],data.frame(SampleName='...',Marker='',Allele1='',Allele2=''),G[23:24,])
-rownames(G2) <- NULL
-knitr::kable(G2,caption="Table 2: Example of a file with reference profiles. Each profile is indicated with a sample name which must correspond to one of ''Father'', ''Mother'' or ''Child'' (unless a custom pedigree is provided). In this prenatal paternity testing example we only have reference profiles for the mother and father.")
-
-## ----fig.show = 'hold', out.width = '30%', echo=FALSE--------------------
-knitr::include_graphics("database_crop.PNG")
-knitr::include_graphics("database_options.png")
-
-## ---- out.width = '30%', echo=FALSE--------------------------------------
-layout( cbind( c(0,0,1,1,1,1,1,0,0), rep(2,9) ) )
-knitr::include_graphics("database_options.png")
-knitr::include_graphics("database_crop.PNG")
-
-## ---- out.width = '35%', fig.align='center', echo=FALSE, out.extra='style="float:left"'----
-knitr::include_graphics("database_crop.PNG")
-
-## ---- out.width = '55%', fig.align='center', echo=FALSE, out.extra='style="float:right"'----
-knitr::include_graphics("database_options.png")
 

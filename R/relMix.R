@@ -51,23 +51,27 @@ relMix <- function(pedigrees, locus, R, datamatrix, ids, D=rep(list(c(0,0)),leng
  
   ix <- seq(1,ncol(datamatrix),2)
   ix <- ix[idx]
-  M <- lapply(ix,function(i){datamatrix[rownames(datamatrix)%in%ids,i:(i+1)]})
-  #Compute probability of mixture given contributors:
-  #If there are silent alleles, these won't be sent to mixLikDrop
-  #as they are indifferent to dropout and drop-in
-  alleleNames <- alleles[alleles!='s']
-  freqs <- afreq[alleles!='s']
+  #If ix is empty, all terms have likelihood 0 under both hypotheses and no need to compute mixture probabilities
   l <- numeric()
-  for(i in 1:length(M)){
-    
-    G <- sapply(ids,function(j) list(M[[i]][j,]))
-    #Set NA for silent alleles
-    G <- lapply(G,function(x) {x[x=='s'] <- NA;x})
-    #Only one replicate
-    #l[i] <- mixLikDrop(R=R,G=G,D=D,di=di,alleleNames=alleleNames,afreq=freqs)
-    #Several replicates - the likelihood is just the product of the likelihood for each replicate
-    l[i] <- prod(sapply(X=R,FUN=mixLikDrop,G=G,D=D,di=di,alleleNames=alleleNames,afreq=freqs))
+  if(length(ix)>0){
+    M <- lapply(ix,function(i){datamatrix[rownames(datamatrix)%in%ids,i:(i+1)]})
+    #Compute probability of mixture given contributors:
+    #If there are silent alleles, these won't be sent to mixLikDrop
+    #as they are indifferent to dropout and drop-in
+    alleleNames <- alleles[alleles!='s']
+    freqs <- afreq[alleles!='s']
+    for(i in 1:length(M)){
+      
+      G <- sapply(ids,function(j) list(M[[i]][j,]))
+      #Set NA for silent alleles
+      G <- lapply(G,function(x) {x[x=='s'] <- NA;x})
+      #Only one replicate
+      #l[i] <- mixLikDrop(R=R,G=G,D=D,di=di,alleleNames=alleleNames,afreq=freqs)
+      #Several replicates - the likelihood is just the product of the likelihood for each replicate
+      l[i] <- prod(sapply(X=R,FUN=mixLikDrop,G=G,D=D,di=di,alleleNames=alleleNames,afreq=freqs))
+    }
   }
+ 
   
   #Combine kinship and mixture calculations
   #Likelihood for each term
