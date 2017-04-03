@@ -43,7 +43,8 @@ The function requires the package Familias and calls on the function FamiliasPed
 The likelihoods for the pedigrees and detailed output for each term considered in the calculation.
 }
 \references{
-Kaur et al. (2016) Relationship inference based on DNA mixtures, Int J Legal Med.;130(2):323-9
+Dorum et al. (2017) Pedigree-based relationship inference from complex DNA mixtures, Int J Legal Med., doi:10.1007/s00414-016-1526-x; 
+Kaur et al. (2016) Relationship inference based on DNA mixtures, Int J Legal Med.;130(2):323-9; 
 Egeland, Kling, Mostad (2015) \pkg{Familias}
 }
 \author{

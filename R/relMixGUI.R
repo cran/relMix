@@ -132,6 +132,17 @@ relMixGUI <- function(){
       rownames(freqs) <- A[,1]
       optPar <- get('optPar',envir=mmTK)
       
+      ix1 <- M[,2]%in%colnames(freqs)
+      ix2 <- G[,2]%in%colnames(freqs)
+      m <- unique(M[!ix1,2],G[!ix1,2])
+      if(length(m)>0) {
+        errorWindow <- gwindow("Error")
+        glabel(paste("Markers not found in database:",paste(m,collapse=", ")),container=errorWindow)
+        stop(paste("Markers not found in database:",paste(m,collapse=", ")))
+        #f_errorWindow(paste("Markers not found in database:",paste(m,collapse=", ")))
+      }
+        
+      
       freqsS <- f_silent(freqs,optPar$silent) #Add silent allele
       freqsS <- get('freqsS',envir=mmTK)
       db2 <- f_unobserved(freqsS,M,G,optPar$MAF) #Add unobserved alleles
@@ -363,6 +374,9 @@ relMixGUI <- function(){
       #Get all database frequencies for the marker
       mark <- M[i,2]
       ix <- which(mark==markerNames)
+      #Check if marker name is the same in mixture file and database, otherwise give error
+      #(This has already been checked once the data was imported in)
+      if(length(ix)==0) f_errorWindow(paste("Marker",mark,"not found in database"))
       al <- alleleNames[!is.na(freqs[,ix])]
       #Alleles in mixture
       am <- M[i,3:n][!is.na(M[i,3:n])] 
@@ -373,6 +387,7 @@ relMixGUI <- function(){
       idx <- c(aa%in%al)
       
       if(any(!idx)){
+        cat(i,"\n")
         keepIx <- c(keepIx,rep(ix,sum(!idx))) #Index of marker
         alNotDB <- c(alNotDB,aa[!idx]) #Alleles not found in db
       }
@@ -463,21 +478,24 @@ relMixGUI <- function(){
       # })
       
       w <- gconfirm(format("Frequencies do not sum to 1. Do you want to scale? If not, a rest allele will be added.",jusity="centre"), title="Note",icon = "info")
-      mSums <- markerNames[ix]
       if(svalue(w)){ #Scale
-        for(m in mSums){
+        for(m in markerNames[ix]){
             db[db[,1]==m,3] <- db[db[,1]==m,3]/sum(db[db[,1]==m,3])
         }
       } else{ #Rest allele, or scale if frequencies sum > 1
             for(i in ix){
                 if(sums[i]>1) { #Enforce scaling
-                  db[db[,1]==m,3] <- db[db[,1]==m,3]/sum(db[db[,1]==m,3])
-                  mess <- paste("Enforced scaling for marker ",markerNames[sums[ix]>1])
-                  gmessage(mess, title="Note",icon = "info")
+                  db[db[,1]==markerNames[i],3] <- db[db[,1]==markerNames[i],3]/sum(db[db[,1]==markerNames[i],3])
+                  # mess <- paste("Enforced scaling for marker ",markerNames[sums[ix]>1])
+                  # gmessage(mess, title="Note",icon = "info")
                 } else { #Rest allele
-                    db <- rbind(db,data.frame(Marker=mSums,Allele='r',Frequency=1-sums[i]))
+                    db <- rbind(db,data.frame(Marker=markerNames[i],Allele='r',Frequency=1-sums[i]))
                 }
-             }
+            }
+        if(any(sums[ix]>1)) {
+          mess <- paste("Enforced scaling for markers:",paste(markerNames[sums[ix]>1],collapse=", "))
+          gmessage(mess, title="Note",icon = "info")
+        }
       }
       assign('dbF',db,envir=mmTK) #Final database
     }
@@ -515,6 +533,7 @@ relMixGUI <- function(){
     db2 <- get("dbF",envir=mmTK) 
     alleleNames <- as.character(db2[,2])
     
+   
     #Check if there are non-numeric allele names and stepwise mutation model
     #If so, give a warning
     isNumeric <- suppressWarnings(as.numeric(alleleNames[alleleNames!="Silent"]))
@@ -550,6 +569,9 @@ relMixGUI <- function(){
     idxC <- union(idxC1,idxC2)
     idxU <- idxC[!idxC%in%idxK] #Contributors with uknown genotypes. Assuming that all individuals are represented in both pedigrees!
     
+    #Check if the names of individuals in the reference file correspond to names in pedigree
+    if(any(!unique(G$SampleName)%in%persons1)) { f_errorWindow("Individuals in reference file not found in pedigree"); stop() }
+  
     #Dropout/drop-in
     #Set default dropout 0 for all contributors if none is set
     # if(!exists('dropliste',envir=mmTK)){
@@ -666,9 +688,6 @@ relMixGUI <- function(){
     contTab <- gtable(format(as.data.frame(contData), justify = "centre"),container=contFrame)
     size(contTab) <- list(height=90,width=240,columnWidths=c(85,85))
     
-    #ggraphics(ps=6, container=contFrame)
-    #plot()
-    
     #Dropout/drop-in
     dropData <- data.frame(Parameter=c(paste("Dropout",names(D)),"Drop-in"),Value=c(unlist(D),di))
     dropData[,1] <- as.character(dropData[,1])
@@ -681,6 +700,35 @@ relMixGUI <- function(){
     
     
     LRgroup2 <- ggroup(container=LRgroup1,horizontal=FALSE,spacing=7)
+    
+    #Plot pedigrees
+    pedGroup <- ggroup(horizontal=TRUE,container=LRgroup2,spacing=5,expand=TRUE)
+    #pedFrame <- gframe("Pedigrees",container=pedGroup,horizontal=TRUE,expand=FALSE)
+    pedFrame1 <- gframe("Pedigree 1",container=pedGroup,horizontal=TRUE,expand=TRUE,fill=TRUE)
+    #size(pedFrame1) <- list(height=110,width=240)
+    #size <- (pedFrame1,height=110,width=240)
+    pedFrame2 <- gframe("Pedigree 2",container=pedGroup,horizontal=TRUE,expand=TRUE,fill=TRUE)
+    #size(pedFrame2) <- list(height=110,width=240)
+    if(all(ped1$findex==0 & ped1$mindex==0)) {
+      glabel("No relations",container=pedFrame1)
+    }else{
+      img1 <- tkrplot(getToolkitWidget(pedFrame1),
+                      fun = function() {
+                        #err <- try(plot(ped1),silent=TRUE)
+                        plot(ped1,cex=0.8)},hscale=0.4,vscale=0.8)
+      add(pedGroup,img1)
+    } 
+    if(all(ped2$findex==0 & ped2$mindex==0)) {
+      glabel("No relations",container=pedFrame2)
+    }else{
+      img2 <- tkrplot(getToolkitWidget(pedFrame2),
+                    fun = function() {
+                      #err <- try(plot(ped2),silent=TRUE)
+                    plot(ped2,cex=0.8)},hscale=0.4,vscale=0.8)
+    add(pedGroup,img2)
+    }
+    
+    #List of LRs
     glabel(paste("Total LR:",format(prod(LRmarker),digits=4,scientific=TRUE)),container=LRgroup2)
     tab <- gtable(format(Data[,1:2],digits=4,scientific=TRUE),container=LRgroup2)
     #size(tab) <- list(width=200,columnWidths=c(10,50))

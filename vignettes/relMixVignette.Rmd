@@ -33,18 +33,18 @@ The first step in RelMix is to import data. The import files must be either comm
 
 ####1a. Mixture profile
 
-Table 1 shows the structure of the mixture file. The first line should contain column names as shown here:  'SampleName', 'Marker', 'Allele1' etc. The mixture profile in this example has a maximum of three unique alleles per markers, but the file may be expanded with columns 'Allele4', 'Allele5' and so on if there are additional observed alleles. In this example there are 22 markers, but only the first five are shown here. Only autosomal markers can be included.
+Table 1 shows the structure of the mixture file. The first line should contain column names as shown here:  'SampleName', 'Marker', 'Allele1' etc. The mixture profile in this example has a maximum of three unique alleles per markers, but the file may be expanded with columns 'Allele4', 'Allele5' and so on if there are additional observed alleles. In this example there are 22 markers, but only the first five are shown here. Only autosomal markers can be included. Marker names are case sensitive, and an error message will be given if markers are not found in the database.
 ```{r, echo=FALSE, results='asis'}
 M <- read.table("mixture.txt",sep="\t",header=TRUE)
 requireNamespace("pander",quietly=TRUE)
 pander::pandoc.table(rbind(head(M, 5),data.frame(SampleName='...',Marker='...',Allele1='...',Allele2='...',Allele3='...')),missing="",caption="Table 1: The mixture profile in example 1.")
 ```
 
-If there are multiple replicates, the next replicate profile must have a different sample name (e.g. "relMix2") and follow directly after the first replicate.
+If there are multiple replicates, the next replicate profile must have a different sample name (e.g. "relMix2") and follow directly after the first replicate (i.e. no blank lines between).
 
 ####1b. Reference profiles
 
-Table 2 shows the format of the file containing the reference profiles (all reference profiles have to be in the same file). The first line should correspond to the column names seen here. The different reference profiles follow directly after each other, and each profile should have a specific sample name. In our example there are two reference profiles, "Mother" and "Father". **Note:** as long as the built-in pedigrees are used, the reference profiles should be named either "Father", "Mother" or "Child" because these are the only individual IDs that are defined in these pedigrees. If custom pedigrees are provided, any sample name can be used (see example 2 below). Only the first two markers and the last one are shown for each profile.
+Table 2 shows the format of the file containing the reference profiles (all reference profiles have to be in the same file). The first line should correspond to the column names seen here. The different reference profiles follow directly after each other, and each profile should have a specific sample name. In our example there are two reference profiles, "Mother" and "Father". The file shoud only contain profiles of individuals defined in the pedigree. **Note:** as long as the built-in pedigrees are used, the reference profiles should be named either "Father", "Mother" or "Child" because these are the only individual IDs that are defined in these pedigrees. If custom pedigrees are provided, any sample name can be used (see example 2 below). Only the first two markers and the last one are shown for each profile.
 
 ```{r, echo=FALSE, results='asis'}
 G <- read.table("references.txt",sep="\t",header=TRUE)
@@ -98,7 +98,7 @@ knitr::include_graphics("dropout_ex1.png")
 Note that if the dropout values are not set, an error window will occur. Even if you do not include dropout and drop-in, you must open the dropout window and click on the save button.
 
 ###6. Compute LR
-Finally, we are ready to click the 'Compute LR' button. The result appears in a new pop-up window (Figure 7). The chosen parameters are displayed on the left, and the total LR followed by the LRs per marker are displayed on the right. By clicking "Save results to file", the LRs together with the mixture profiles, reference profiles and the parameters will be saved to file.
+Finally, we are ready to click the 'Compute LR' button. The result appears in a new pop-up window (Figure 7). The chosen parameters are displayed on the left, top right shows the pedigrees, followed by the total LR and a table displaying the LRs per marker. By clicking "Save results to file", the LRs together with the mixture profiles, reference profiles and the parameters will be saved to file.
 ```{r, out.width = 500, fig.retina = NULL,echo=FALSE,fig.cap="Figure 7: Results for example 1."}
 knitr::include_graphics("results_ex1.png")
 ```
@@ -187,7 +187,7 @@ knitr::include_graphics("dropout_ex2.png")
 ```
 
 ###6. Compute LR
-The resulting LR for example 2 is shown in Figure 14.
+The resulting LR for example 2 is shown in Figure 14. Note that in pedigree 2 there are are no relations to plot.
 ```{r, out.width =  350, fig.retina = NULL,echo=FALSE,fig.cap="Figure 14: Computed LR for example 2."}
 knitr::include_graphics("results_ex2.png")
 ```
