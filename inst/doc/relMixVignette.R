@@ -66,13 +66,11 @@ knitr::include_graphics("mutations_ex2.png")
 #  persons <- c("C2","C1")
 #  ped1 <- FamiliasPedigree(id=persons, dadid=c(NA,NA), momid=c("C1", NA),
 #                           sex=c("male", "female"))
-#  pedigrees <- list(ped1)
 
 ## ---- eval=FALSE---------------------------------------------------------
 #  persons <- c("C2","C1")
 #  ped1 <- FamiliasPedigree(id=c(persons), dadid=c(NA, NA),
 #                           momid=c( NA, NA), sex=c("male", "female"))
-#  pedigrees <- list(ped1)
 
 ## ---- out.width =  300, fig.retina = NULL,echo=FALSE,fig.cap="Figure 11: We import custom pedigrees from R scripts in example 2."----
 knitr::include_graphics("custom_ped_ex2.png")
@@ -83,6 +81,6 @@ knitr::include_graphics("contributors_ex2.png")
 ## ---- out.width =  150, fig.retina = NULL,echo=FALSE,fig.cap="Figure 13: Possible dropout for both contributors in example 2."----
 knitr::include_graphics("dropout_ex2.png")
 
-## ---- out.width =  350, fig.retina = NULL,echo=FALSE,fig.cap="Figure 14: Computed LR for example 2."----
+## ---- out.width =  500, fig.retina = NULL,echo=FALSE,fig.cap="Figure 14: Computed LR for example 2."----
 knitr::include_graphics("results_ex2.png")
 

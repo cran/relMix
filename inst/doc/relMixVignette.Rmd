@@ -1,15 +1,15 @@
 ---
-title: "RelMix 1.2"
+title: "RelMix 1.3"
 author: "Guro Dorum"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{relMix 1.2}
+  %\VignetteIndexEntry{relMix 1.3}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-This vignette gives an introduction to RelMix 1.2, the graphical user interface of the relMix package. We will present the main features of the GUI with two examples.
+This vignette gives an introduction to RelMix 1.3, the graphical user interface of the relMix package described in Dørum et al. (2017). We will present the main features of the GUI with two examples.
 
 ##Getting started
 
@@ -29,7 +29,7 @@ In this example we consider a paternity case where we have a mixed DNA profile o
 
 ###1. Import data
 
-The first step in RelMix is to import data. The import files must be either comma, semicolon or tab-separated and must have dots as decimal separators. Examples will be given for the three types of files that are needed: mixture profile, reference profiles and allele frequencies. The mixture profile and reference profiles should contain the same loci in the same order, while the allele frequency file can contain additional loci not in the profiles.
+The first step in RelMix is to import data. The import files must be either comma, semicolon or tab-separated and must have dots as decimal separators. Examples will be given for the three types of files that are needed: mixture profile, reference profiles and allele frequencies. The mixture profile and reference profiles should contain the same loci in the same order, while the allele frequency file can contain additional loci not in the profiles. RelMix will give an error message if the data file has an error that is fatal for the program. RelMix will return a warning if there is a minor error in the data file that is not fatal for the program.
 
 ####1a. Mixture profile
 
@@ -91,10 +91,11 @@ knitr::include_graphics("contributors_ex1.png")
 ```
 
 ###5. Dropout and drop-in
-The last step is to specify dropout and drop-in values. By default all values are set to 0. In this case we expect no dropout from the mother so we set her dropout probability to 0, while the child is given a dropout probability of 0.1. The drop-in value is set to 0.05 (Figure 6).
+The last step is to specify dropout and drop-in values. See Dørum et al. (2017) for a detailed description about the drop-in/dropout model. By default all values are set to 0. In this case we expect no dropout from the mother so we set her dropout probability to 0, while the child is given a dropout probability of 0.1. The drop-in value is set to 0.05 (Figure 6).
 ```{r, out.width =  150, fig.retina = NULL,echo=FALSE,fig.cap="Figure 6: In example 1 we assume dropout probabilities 0 for the mother and 0.1 for the child and drop-in 0.05."}
 knitr::include_graphics("dropout_ex1.png")
 ```
+
 Note that if the dropout values are not set, an error window will occur. Even if you do not include dropout and drop-in, you must open the dropout window and click on the save button.
 
 ###6. Compute LR
@@ -105,6 +106,8 @@ knitr::include_graphics("results_ex1.png")
 
 
 ##Example 2: Mutations, silent alleles and custom pedigree
+Click the RESTART button before starting on a new case.
+
 In this example we have a two-person mixture with one known contributor, and it is hypothesised whether the second contributor is the child of the first contributor, or someone unrelated. We take silent alleles and mutations into account. Only one locus is considered.
 
 ###1. Import data
@@ -154,20 +157,26 @@ knitr::include_graphics("mutations_ex2.png")
 ```
 
 ###3. Pedigree
-Since the hypotheses in this example are not covered by the built-in pedigrees, we will provide RelMix with a custom pedigree through an R script. This R script can for instance be exported from Familias 3, but can also be generated manually. The script below shows the code needed to provide the first pedigree where the two contributors are mother and child. Note that the names of the individuals in the pedigree must correspond to the names of individuals in the reference profiles.
+Since the hypotheses in this example are not covered by the built-in pedigrees, we will provide RelMix with custom pedigrees defined in R scripts. The R scripts can for instance be exported from Familias 3, but can also be generated manually. The script below shows the code needed to provide the first pedigree where the two contributors are mother and child. 
+
 ```{r, eval=FALSE}
 persons <- c("C2","C1")
 ped1 <- FamiliasPedigree(id=persons, dadid=c(NA,NA), momid=c("C1", NA), 
                          sex=c("male", "female"))
-pedigrees <- list(ped1)
 ```
+
 The second pedigree, where the two contributors are unrelated, is defined as below.
 ```{r, eval=FALSE}
 persons <- c("C2","C1")
 ped1 <- FamiliasPedigree(id=c(persons), dadid=c(NA, NA), 
                          momid=c( NA, NA), sex=c("male", "female"))
-pedigrees <- list(ped1)
 ```
+**Note 1**: Each pedigree must be defined in a variable called "ped1".
+
+**Note 2**: The names of the individuals in a pedigree (the id) must correspond to the names of individuals in the reference profiles.
+
+**Note 3**: Each pedigree must be defined in a separate R script.
+
 Figure 11 shows how to import the custom pedigrees from R scripts, one script per pedigree.
 ```{r, out.width =  300, fig.retina = NULL,echo=FALSE,fig.cap="Figure 11: We import custom pedigrees from R scripts in example 2."}
 knitr::include_graphics("custom_ped_ex2.png")
@@ -188,6 +197,9 @@ knitr::include_graphics("dropout_ex2.png")
 
 ###6. Compute LR
 The resulting LR for example 2 is shown in Figure 14. Note that in pedigree 2 there are are no relations to plot.
-```{r, out.width =  350, fig.retina = NULL,echo=FALSE,fig.cap="Figure 14: Computed LR for example 2."}
+```{r, out.width =  500, fig.retina = NULL,echo=FALSE,fig.cap="Figure 14: Computed LR for example 2."}
 knitr::include_graphics("results_ex2.png")
 ```
+
+### References
+Dørum, G., Kaur, N., & Gysi, M. (2017). Pedigree-based relationship inference from complex DNA mixtures. International journal of legal medicine, 131(3), 629-641.
