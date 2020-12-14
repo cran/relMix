@@ -1,6 +1,6 @@
-3371198117888f3e2de57dd473ba59d3 *DESCRIPTION
+e343a9295f453c7980b00d8cb6f63a08 *DESCRIPTION
 f6ea3f284f332086680bc828169b736b *NAMESPACE
-5ae7c5338e80116b09a8b89cc8b0c6de *NEWS.md
+d48c7a5572fb3eba55a7e6833471e037 *NEWS.md
 3c8e63f3216eec09f56bde08bc6ff504 *R/allGenos.R
 f0e0fa45eba281eee56597f7d6dc1f0a *R/checkFrequenciesFile.R
 18202c33d8355bb415e6283103060bf5 *R/checkMixtureFile.R
@@ -13,15 +13,15 @@ fd6ace129cec9dcafa84e639295e5ecc *R/generateMix.R
 b309b308710bc7eb770b2e2fada75370 *R/globals.R
 1544a12572090eb519ad9558196cf745 *R/mixLikDrop.R
 5138d5dbba189c4feeced09aa72ee125 *R/relMix.R
-4f20782e3de64d77c3d0ffa941e6b8b2 *R/relMixGUI.R
+e67d07dfba98078924d34200b53124c0 *R/relMixGUI.R
 0ec26936a338798a8c3e8b3cdbbd86ae *R/util.R
-49a1932a370c6955a3018750ca2323d1 *README.md
+9f0c7a1b761672670ba1cd50ce22643c *README.md
 bf37b28cd69a3d205e62400a99038e19 *build/vignette.rds
 66cf1942ace7934160b8a6235ab3705e *data/db.RData
 6b86068f85c333347b502eca5a2773bf *data/db2.RData
 c2adf7190ce0f872e959f1e885487050 *inst/doc/relMixVignette.R
 ca736ddabe793f0c5ce11ca7e78d6095 *inst/doc/relMixVignette.Rmd
-f4947a7a26b5fb381d32aa500974bff6 *inst/doc/relMixVignette.html
+f7ef479c45b8c4bc9cd97f8233dc711e *inst/doc/relMixVignette.html
 98d70dd30e26fad9b6b1cda81ce7d25b *inst/extdata/custom_pedigree_maternity_duo.R
 a1d097eb8df3df9c543f0784d6ccced4 *inst/extdata/custom_pedigree_unrelated_duo.R
 3bfc38ed5c8fc3aa840a76efeb1ca062 *inst/extdata/freqsSilent.txt
