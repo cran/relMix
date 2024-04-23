@@ -1,4 +1,20 @@
-# relMix 1.3
+# relMix 1.4
+
+#### Changes in v. 1.4
+
+New features
+  
+* Custom pedigree files in ```relMixGUI``` must be specified by text files in ped format instead of R scripts
+
+* ```relMixGUI``` now also accept non-numeric allele names
+  + The exception is if mutation model "stepwise" is used
+
+* An improved report file that includes 
+  + Allele frequencies used in the LR calculations
+  + Plots of pedigrees used under each hypothesis
+  + And is saved as a word file rather than a txt file
+
+
 
 #### Major changes in v. 1.3
 
@@ -29,3 +45,7 @@ Package has been updated to use `gWidgets2` and `gWidgets2tcltk` instead of `gWi
 ##### Minor changes in v. 1.3.3
 
 * Make `tkrplot` a *suggests* dependency so that users which cannot install it can still use the non-plotting functionality of relMix. Now, if `tkrplot` is not available, the pedigrees will not be plotted in the results screen and instead a message explaining the problem will be shown.
+
+##### Minor changes in v. 1.3.4
+
+* The dependency `Familias` is no longer available on CRAN and is installed from GitHub instead. Due to this, relMix is also no longer available on CRAN.

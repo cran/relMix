@@ -14,22 +14,21 @@ checkPedigreeFile(filename, df)
 \value{
 A list containing
 \itemize{
-\item{df} {Pedigree, NULL if errors are present.}
-\item{\code{warning}} {A list of strings describing the errors that ocurred but could be fixed or that do not prevent the execution of the program.}
-\item{\code{error}} {A list of strings describing the errors that ocurred that made it imposible to return a valid data frame.
-If this list is not empty, then the dataframe item will be null.}}
+\item \code{df} A list of class [Familias::FamiliasPedigree()], or NULL if errors are present.
+\item \code{warning} A list of strings describing the errors that ocurred but could be fixed or that do not prevent the execution of the program.
+\item \code{error} A list of strings describing the errors that ocurred that made it imposible to return a valid data frame.
+If this list is not empty, then the dataframe item will be null.}
 }
 \description{
 Given a pedigree file path the function attempts to load it and compare it
 to the reference profiles to detect possible errors.
 }
 \details{
-The pedigree file must be a .R file defining a pedigree (see the relMix vignette for an example). The data frame with reference data is used to compare names of individuals and detect possible misspellings.
+The pedigree file must be a a text file in ped format (see the relMix vignette for an example). The data frame with reference data is used to compare names of individuals and detect possible misspellings.
 If warnings are found, the function attempts to fix them and explains what it has done in the warning messages.
 If an error is found, checking stops. The error is described in the error messages.
 }
 \examples{
-\dontrun{
 #First load mixture file
 mixfile <- system.file("extdata","mixture_silent_ex.txt",package="relMix")
 mix <- checkMixtureFile(mixfile);
@@ -37,9 +36,8 @@ mix <- checkMixtureFile(mixfile);
 reffile <- system.file("extdata","references_silent.txt",package="relMix")
 ref <- checkReferenceFile(reffile, mix$df)
 #Check pedigree file
-pedfile <- system.file("extdata","custom_pedigree_maternity_duo.R",package="relMix")
+pedfile <- system.file("extdata","custom_pedigree_maternity_duo.ped",package="relMix")
 checkPedigreeFile(pedfile,ref$df);
-}
 }
 \author{
 Elias Hernandis

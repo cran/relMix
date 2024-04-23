@@ -5,14 +5,17 @@
 
 relMix makes relationship inference involving DNA mixtures with unknown
 profiles and interprets DNA mixtures with related contributors. The main
-function is the graphical user interface `relMixGUI`.
+function is the graphical user interface `relMixGUI`. A tutorial can be
+found here: <https://gdorum.github.io/relMix/articles/relMix.html>
 
 ## Installation
 
-### Install relMix from CRAN:
-
+Install from GitHub as follows:
 ``` r
-install.packages("relMix")
+ # First install devtools if needed
+if(!require(devtools)) install.packages("devtools")
+#Install relMix from GitHub:
+devtools::install_github("gdorum/relMix")
 ```
 
 To provide pedigree plots, relMix uses the package `tkrplot`. However,
@@ -24,16 +27,5 @@ the results screen have to install the package `tkrplot` manually with
 install.packages("tkrplot")
 ```
 
-The `tkrplot` package will be loaded by relMix automatically, so users
-do not need to run `library("tkrplot")` in advance.
-
-### Or install the development version from GitHub:
-
-``` r
- # First install devtools if needed
-if(!require(devtools)) install.packages("devtools")
-devtools::install_github("gdorum/relMix")
-```
-
-As with the stable version, plotting requires the `tkrplot` package to
-be available.
+The `tkrplot` package will be loaded by relMix automatially, so users do
+not need to run `library("tkrplot")` in advance.
